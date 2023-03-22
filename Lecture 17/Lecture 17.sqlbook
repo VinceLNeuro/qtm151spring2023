@@ -63,7 +63,7 @@ CREATE TABLE drivers(
 
 Add rows to table
 -- SQLBook: Code
--- "INSET INTO" adds rows with VALUES ... to the bottom of the table
+-- "INSET INTO" adds rows with VALUES ... to the bottom of the table (system command)
 -- In SQL different lines need to be separated by a semicolon ";"
 -- You write system commands in capital letters to easily distinguish
 -- column names from system commands
@@ -86,7 +86,7 @@ $\qquad$ <img src="figures/view_table_sql.png" alt="drawing" width="350"/>
 -- SQLBook: Code
 -- In SQL, a set of tables is called a "Schema"
 -- Click "refresh" to see changes
--- The pencil button edits column attributes
+-- The pencil button edits column attributes (similar to the codebook)
 -- The three-stripes button opens the table
 -- SQLBook: Markup
 <font size="5"> 
@@ -99,9 +99,11 @@ Try it yourself!
 -- Select a new driver id (needs to be unique)
 -- Make sure to deparate arguments by a semicolon!
 
+INSERT INTO drivers  VALUES (5, 'Vincent Luo', 'China', 31);
 
+INSERT INTO drivers  VALUES (7, 'Parker S', 'US', 82);
 
-
+-- INSERT INTO drivers  VALUES (4, 'Fernando Alonso', 'Spanish',32);
 -- SQLBook: Markup
 # <span style="color:darkblue"> II. Dataset Operations </span>
 
@@ -112,8 +114,9 @@ Extracting columns from table
 -- SQLBook: Code
 -- SELECT extracts certain COLUMNS
 -- FROM is used to indicate the source table
+-- Need to seperate all inputs in comma
 
-SELECT driver_id nationality FROM drivers;
+SELECT driver_id, nationality FROM drivers;
 -- SQLBook: Markup
 <font size="5"> 
 
@@ -127,12 +130,17 @@ SELECT * FROM drivers;
 Subsetting rows
 -- SQLBook: Code
 -- The WHERE command evaluates logical conditions to subset rows
-SELECT * FROM drivers
+
+-- Different from python:
+-- 1. Need the single quotation
+-- 2. Should not use "=="
+
+SELECT * FROM drivers -- select everything from the dataset where the nationality is german
 WHERE nationality = 'German';
 
 -- Evalute OR conditions
 SELECT * FROM drivers
-WHERE (nationality = 'German') OR (nationality = 'British');
+WHERE (nationality = 'US') OR (nationality = 'China');
 
 -- Evaluate AND conditions
 SELECT * FROM drivers
@@ -147,12 +155,12 @@ Aggregate
 -- such as SUM() or AVG() 
 -- The AS is an alias which assigns a name to the aggregate statistic
 
-SELECT COUNT(*) AS num_rows,
-       SUM(victories) AS sum_victories,
+SELECT COUNT(*) AS num_rows, -- count total number of rows
+       SUM(victories) AS sum_victories, 
        AVG(victories) AS mean_victories,
        MIN(victories) AS min_victories,
        MAX(victories) AS max_victories
-FROM drivers
+FROM drivers;
 -- SQLBook: Markup
 <font size="5"> 
 
@@ -161,7 +169,7 @@ Sort
 -- Order in ascending order of victories
 -- Remember that * means that all columns are selected
 SELECT * FROM drivers
-ORDER BY victories ASC;
+ORDER BY victories ASC; -- same as "sort_values(by = , ascending =)"
 
 -- Order in descending order of victories
 SELECT * FROM drivers
@@ -188,7 +196,8 @@ with more than 60 victories
 -- SQLBook: Code
 -- Write your own code!
 
-
+SELECT driver_id, nationality from drivers
+WHERE victories >= 60;
 
 
 
@@ -207,7 +216,11 @@ SELECT nationality,
        MIN(victories) AS min_victories,
        MAX(victories) AS max_victories
 FROM drivers
+
+-- Subsetting
 GROUP BY nationality;
+
+-- Filtering after aggregating
 -- SQLBook: Markup
 <font size = "5">
 
@@ -241,9 +254,11 @@ SELECT nationality,
        MIN(victories) AS min_victories,
        MAX(victories) AS max_victories
 FROM drivers
-WHERE nationality = 'German'
+WHERE nationality = 'German' -- Query before groupby
 GROUP BY nationality
 HAVING SUM(victories) > 50;
+-- SQLBook: Markup
+---
 -- SQLBook: Markup
 # <span style="color:darkblue"> IV. Learning more </span>
 
@@ -253,8 +268,8 @@ Equivalence:
 
 **PYTHON** $\qquad \qquad \ \ $ **SQL** <br>
 ```[] ``` $\qquad \qquad \qquad \ \ \ $ ```SELECT``` <br>
-```.query() ``` $\qquad \qquad $ ```WHERE``` (before subsetting) <br>
-```.query() ``` $\qquad \qquad $ ```HAVING``` (after subsetting) <br>
+```.query() ``` $\qquad \qquad $ ```WHERE``` (before aggregating) <br>
+```.query() ``` $\qquad \qquad $ ```HAVING``` (after aggregating) <br>
 ```.groupby().agg() ``` $\ $ ```SELECT ... AS ... ```<br>
 $\qquad \qquad \qquad \qquad \ $```GROUP BY```<br>
 
