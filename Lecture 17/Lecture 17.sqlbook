@@ -63,7 +63,7 @@ CREATE TABLE drivers(
 
 Add rows to table
 -- SQLBook: Code
--- "INSET INTO" adds rows with VALUES ... to the bottom of the table (system command)
+-- "INSET INTO" adds rows with VALUES ... to the bottom of the table
 -- In SQL different lines need to be separated by a semicolon ";"
 -- You write system commands in capital letters to easily distinguish
 -- column names from system commands
@@ -86,7 +86,7 @@ $\qquad$ <img src="figures/view_table_sql.png" alt="drawing" width="350"/>
 -- SQLBook: Code
 -- In SQL, a set of tables is called a "Schema"
 -- Click "refresh" to see changes
--- The pencil button edits column attributes (similar to the codebook)
+-- The pencil button edits column attributes
 -- The three-stripes button opens the table
 -- SQLBook: Markup
 <font size="5"> 
@@ -99,11 +99,8 @@ Try it yourself!
 -- Select a new driver id (needs to be unique)
 -- Make sure to deparate arguments by a semicolon!
 
-INSERT INTO drivers  VALUES (5, 'Vincent Luo', 'China', 31);
 
-INSERT INTO drivers  VALUES (7, 'Parker S', 'US', 82);
 
--- INSERT INTO drivers  VALUES (4, 'Fernando Alonso', 'Spanish',32);
 -- SQLBook: Markup
 # <span style="color:darkblue"> II. Dataset Operations </span>
 
@@ -114,7 +111,6 @@ Extracting columns from table
 -- SQLBook: Code
 -- SELECT extracts certain COLUMNS
 -- FROM is used to indicate the source table
--- Need to seperate all inputs in comma
 
 SELECT driver_id, nationality FROM drivers;
 -- SQLBook: Markup
@@ -130,17 +126,12 @@ SELECT * FROM drivers;
 Subsetting rows
 -- SQLBook: Code
 -- The WHERE command evaluates logical conditions to subset rows
-
--- Different from python:
--- 1. Need the single quotation
--- 2. Should not use "=="
-
-SELECT * FROM drivers -- select everything from the dataset where the nationality is german
+SELECT * FROM drivers
 WHERE nationality = 'German';
 
 -- Evalute OR conditions
 SELECT * FROM drivers
-WHERE (nationality = 'US') OR (nationality = 'China');
+WHERE (nationality = 'United States') OR (nationality = 'Indian');
 
 -- Evaluate AND conditions
 SELECT * FROM drivers
@@ -155,8 +146,8 @@ Aggregate
 -- such as SUM() or AVG() 
 -- The AS is an alias which assigns a name to the aggregate statistic
 
-SELECT COUNT(*) AS num_rows, -- count total number of rows
-       SUM(victories) AS sum_victories, 
+SELECT SUM(victories) AS sum_victories,
+       COUNT(*) AS num_rows,
        AVG(victories) AS mean_victories,
        MIN(victories) AS min_victories,
        MAX(victories) AS max_victories
@@ -169,7 +160,7 @@ Sort
 -- Order in ascending order of victories
 -- Remember that * means that all columns are selected
 SELECT * FROM drivers
-ORDER BY victories ASC; -- same as "sort_values(by = , ascending =)"
+ORDER BY victories ASC;
 
 -- Order in descending order of victories
 SELECT * FROM drivers
@@ -196,9 +187,6 @@ with more than 60 victories
 -- SQLBook: Code
 -- Write your own code!
 
-SELECT driver_id, nationality from drivers
-WHERE victories >= 60;
-
 
 
 -- SQLBook: Markup
@@ -216,11 +204,7 @@ SELECT nationality,
        MIN(victories) AS min_victories,
        MAX(victories) AS max_victories
 FROM drivers
-
--- Subsetting
 GROUP BY nationality;
-
--- Filtering after aggregating
 -- SQLBook: Markup
 <font size = "5">
 
@@ -254,11 +238,9 @@ SELECT nationality,
        MIN(victories) AS min_victories,
        MAX(victories) AS max_victories
 FROM drivers
-WHERE nationality = 'German' -- Query before groupby
+WHERE nationality = 'German'
 GROUP BY nationality
 HAVING SUM(victories) > 50;
--- SQLBook: Markup
----
 -- SQLBook: Markup
 # <span style="color:darkblue"> IV. Learning more </span>
 
