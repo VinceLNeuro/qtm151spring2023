@@ -61,7 +61,8 @@ CREATE TABLE us_congress_members (
 DROP TABLE IF EXISTS bills_actions;
 
 CREATE TABLE bills_actions (
-        "Congress"  int NOT NULL,
+        "Congress"  int NOT NULL, -- if the column number is in capital letter, use the double quotation
+                                  -- NOT NULL means the congress must be filled in
         bill_number int ,
         bill_type   varchar(30),
         action      varchar(1000),
@@ -83,10 +84,20 @@ Try it yourself!
 
 - Create a new table for "bills_subjects"
 -- SQLBook: Code
-# Write your own code
+-- Write your own code
 
+-- Check if the table EXISTS
+DROP TABLE if EXISTS bills_subjects;
 
-
+CREATE TABLE bills_subjects(
+    "Congress" int,
+    "Bill_number" int ,
+    "Bill_type"   varchar(30),
+    "Action"      varchar(1000),
+    "Main_action" varchar(50),
+    "Object"      varchar(30),
+    "Member_id"   int
+)
 -- SQLBook: Markup
 # <span style="color:darkblue"> II. Import CSV into SQL </span>
 
@@ -115,6 +126,10 @@ COPY us_congress_members
 FROM 'D:\GitHub\qtm151spring2023\Lecture 18\data\us_congress_members.csv' ```
 WITH (DELIMITER ',', FORMAT csv, HEADER MATCH);
 ```
+-- SQLBook: Code
+-- Import the dataset
+COPY us_congress_members
+FROM '/private/tmp/data/us_congress_members.csv' DELIMITER ',', CSV, HEADER MATCH;
 -- SQLBook: Code
 -- The argument associaated with COPY is the dataset in our server
 -- The argument associaated with FROM is a filepath name
