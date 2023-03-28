@@ -22,9 +22,6 @@ In this class we will
 United States Congress dataset
 
 <img src="figures/rdb_us_congress.png" alt="drawing" width="650"/>
--- SQLBook: Markup
-<font size = 5><font color = "blue"> Check this webset if got confused about the ERD: \
-https://www.lucidchart.com/pages/er-diagrams
 -- SQLBook: Code
 -- An entity relationship diagram presents, tables, attributes, and their
 -- connection between them. This is called "Crow's foot" notation
@@ -37,11 +34,8 @@ https://www.lucidchart.com/pages/er-diagrams
 <font size = "5">
 
 Create table from codebook/dictionary
-
-- **'PRIMARY KEY' & 'NOT NULL' -> QC**
-- **Capital column name use "Column name"**, otherwise use 'column name'
 -- SQLBook: Code
--- Active: 1678830264746@@127.0.0.1@5432@postgres
+-- Active: 1680027197221@@127.0.0.1@5432@postgres
 -- We start by deleting the old table
 -- SQL does not allow you to create a table if one already exists
 DROP TABLE IF EXISTS us_congress_members;
@@ -49,7 +43,7 @@ DROP TABLE IF EXISTS us_congress_members;
 -- Note in SQL the codebook is also called a "dictionary"
 -- The option PRIMARY KEY indicates that this is the unique identifier
 CREATE TABLE us_congress_members (
-        member_id    int PRIMARY KEY,  -- **Uniquely identify the members**
+        member_id    int PRIMARY KEY,
         full_name    varchar(30),
         last_name    varchar(30),
         member_title varchar(30),
@@ -88,32 +82,25 @@ in double quotations, e.g. "Congress"
 
 Try it yourself!
 
-- Create a new table for "bills_subjects" (the last entity to be bill_subjects)
-<img src="figures/rdb_us_congress.png" alt="drawing" width="650"/>
-
+- Create a new table for "bills_subjects"
 -- SQLBook: Code
 -- Write your own code
 
-DROP TABLE if EXISTS bills_subjects;
+DROP TABLE IF exists bills_subjects;
 
 CREATE TABLE bills_subjects(
-    "Congress" INT NOT NULL,
-    bill_number INT,
-    bill_type VARCHAR(30),
-    bill_subject VARCHAR(30)
-);
+    "Congress" int,
+    bill_number int,
+    bill_type varchar(30),
+    bill_subject varchar(30)
+)
 
 -- SQLBook: Markup
 # <span style="color:darkblue"> II. Import CSV into SQL </span>
 
 <font size = "5">
 
----
-<span style = "color:red"> **(Not the right one)** </span>
-
-(a) **Connect** to your SQL server as in Lecture 17
-
-(b) **Copy the pathname** of the ".csv" file
+(a) **Copy the pathname** of the ".csv" file
 
 - Open the folder in VS-Code
 - Right click on the file
@@ -122,7 +109,7 @@ CREATE TABLE bills_subjects(
 $\quad$ <img src="figures/get_file_path.png" alt="drawing" width="400"/>
 
 
-(c) **Import row data**
+(b) **Import row data**
 
 For the instructor's computer this is:
 
@@ -131,85 +118,53 @@ For the instructor's computer this is:
 
 ```sql
 COPY us_congress_members
-FROM 'D:\GitHub\qtm151spring2023\Lecture 18\data\us_congress_members.csv' ```
+FROM 'D:\GitHub\qtm151spring2023\Lecture 18\data\us_congress_members.csv'
 WITH (DELIMITER ',', FORMAT csv, HEADER MATCH);
 ```
--- SQLBook: Code
--- Test -> Permission denied
-COPY us_congress_members
-FROM '/Users/vincent/Documents/GitHub/qtm151spring2023/Lecture 18/data/us_congress_members.csv'
-WITH (DELIMITER ',', FORMAT csv, HEADER MATCH)
--- SQLBook: Markup
----
--- SQLBook: Markup
-<span style = "color: red; font-size: 150%"> **The right method to import dataset** </span>
--- SQLBook: Markup
-# <span style="color:darkblue"> Permissions Mac </span>
-
-<font size = "5">
-
-Sometimes you won't be able to use COPY because your SQL <br>
-does not have permission to access it. <br>
-
-To overcome these permission issues on a mac, you can copy <br>
-your files to a temporary folder. Follow these steps
 -- SQLBook: Markup
 <font size = "5">
 
-(1) Open the terminal
+Try it yourself!
 
-- Type "open /tmp"
-- This will open a window in finder "tmp"
--- SQLBook: Markup
-<font size = "5">
+- Import the table "us_congress_members.csv" using COPY
+- If you experience permission issues, see the <br> 
+additional ".sqlbooks" in this folder
 
-(2) Copy the "data" folder in Lecture 18 to "tmp"
-
-- Do this by dragging and dropping the file <br>
-in the finder window
--- SQLBook: Markup
-<font size = "5">
-
-(3) Get file pathname
-
-- In the "tmp" folder, enter the data
-- Hold the "Option" key on your keyboard
-- While you do, right Click on a ".csv" file, e.g. ```"us_congress_members.csv"```
-- Select the option 
-
-``` Copy "us_congress_members.csv" as PATHNAME ```
 -- SQLBook: Code
--- Import the dataset into the "us_congress_members" table created in the server previously
-COPY us_congress_members
-FROM '/private/tmp/SQL_import_data/us_congress_members.csv'
-WITH (DELIMITER ',', FORMAT csv, HEADER MATCH)
--- SQLBook: Code
--- Take a look at the whole imported dataset
-SELECT * FROM us_congress_members
--- SQLBook: Markup
-Explain the arguments
--- SQLBook: Code
--- COPY: the name of the table dataset in our server
--- FROM: filepath name of the dataset
-
+-- Write your own code
+--
+-- The argument associaated with COPY is the dataset in our server
+-- The argument associaated with FROM is a filepath name
 -- There are three options specified in WITH:
-    --1. DELIMETER indicates values are comma separated ","
-    --2. FORMAT indicates that this is a CSV
-    --3. HEADER MATCH indicates that the first row contains column names and should be ignored when importing.
+-----  DELIMETER indicates values are comma separated ","
+-----  FORMAT indicates that this is a CSV
+-----  HEADER MATCH indicates that the first row contains column
+-----  names and should be ignored when importing.
+
+-- You just have to change the FROM argument
+
+
+
+
+
+
 -- SQLBook: Markup
+
 <font size = "5">
 
-Interpreting Error Messages:
--- SQLBook: Code
--- NOTE 1: Sometimes HEADER MATCH will give an error if the 
--- 'CSV' file contains columns that are out of order. If this happens
---  either edit the order of "CREATE TABLE" above
+Try it yourself!
 
--- NOTE 2: Sometimes you will get an error if the table doesn't
--- already exist. If this happens, it means that you haven't
--- run the "CREATE TABLE" above.
--- SQL doesn't allow you to import data without specifying the
--- "codebook" first. In that sense it's quite different from Python.
+Use the following code to view the dataset
+
+```sql
+SELECT * FROM us_congress_members
+```
+-- SQLBook: Code
+-- Write your own code
+
+
+
+
 -- SQLBook: Markup
 <font size = "5">
 
@@ -225,13 +180,13 @@ SELECT * FROM bills_actions
 -- Write your own code
 -- Note in the instructor's computer this is:
 -- You just have to change the FROM argument
---
-COPY bills_actions
-FROM '/private/tmp/SQL_import_data/bills_actions.csv'
-WITH (DELIMITER ',', FORMAT csv, HEADER MATCH);
--- SQLBook: Code
--- View the dataset
-SELECT * FROM bills_actions
+-- COPY bills_actions
+-- FROM '/private/tmp/data/bills_actions.csv'
+-- WITH (DELIMITER ',', FORMAT csv, HEADER MATCH);
+
+
+
+
 -- SQLBook: Markup
 <font size = "5">
 
@@ -239,11 +194,25 @@ SELECT * FROM bills_actions
 
 - Make sure to enter the paths of the files! <br>
  This is specific to each computer
-- **Make sure that you've created a table before <br>
-using COPY**
+- Make sure that you've created a table before <br>
+using COPY
 
 
 
+-- SQLBook: Markup
+<font size = "5">
+
+Interpreting Error Messages:
+-- SQLBook: Code
+-- NOTE 1: Sometimes HEADER MATCH will give an error if the 
+-- 'CSV' file contains columns that are out of order. If this happens
+--  either edit the order of "CREATE TABLE" above
+
+-- NOTE 2: Sometimes you will get an error if the table doesn't
+-- already exist. If this happens, it means that you haven't
+-- run the "CREATE TABLE" above.
+-- SQL doesn't allow you to import data without specifying the
+-- "codebook" first. In that sense it's quite different from Python.
 -- SQLBook: Markup
 # <span style="color:darkblue"> III. Merge Data </span>
 
@@ -256,7 +225,7 @@ Import the data before proceeding!
 
 Count unique rows
 -- SQLBook: Code
--- COUNT(DISTINCT columnname) computes the number of unique rows
+-- COUNT(DISTINCT ) computes the number of unique rows
 -- "AS" is the alias or name of the statistic
 
 SELECT COUNT(DISTINCT party_name) AS num_distinct_parties,
@@ -272,7 +241,7 @@ GROUP BY party_name
 -- SQLBook: Markup
 <font size = "5">
 
-Count members for each party
+Count members of group
 -- SQLBook: Code
 SELECT party_name,       
        COUNT(*) AS num_members       
@@ -298,12 +267,6 @@ ON us_congress_members.member_id  = bills_actions.member_id;
 -- Note: This command may take a few seconds to run. This is normal
 -- In the instructor's computer this took 2 min but may take more 
 -- or less in your computer
--- SQLBook: Code
-SELECT * 
-FROM bills_actions
-LEFT JOIN us_congress_members
--- Same as the above, sequence does not matter
-ON bills_actions.member_id  = us_congress_members.member_id;
 -- SQLBook: Markup
 <font size = "5">
 
@@ -312,10 +275,10 @@ Try it yourself!
 - Count the unique number of members by 'chamber'
 -- SQLBook: Code
 -- Write your own code
-SELECT chamber,
-    COUNT (*) AS num_members
-FROM us_congress_members
-GROUP BY chamber
+
+
+
+
 
 -- SQLBook: Markup
 # <span style="color:darkblue"> IV. (Optional) Additional Resources </span>
@@ -326,7 +289,7 @@ Overview of SQL:
 
 https://www.youtube.com/watch?v=27axs9dO7AE
 
-Introduction to databases: <span style = "color:red"> **Great source**</span>
+Introduction to databases:
 
 https://www.youtube.com/watch?v=wR0jg0eQsZA
 
